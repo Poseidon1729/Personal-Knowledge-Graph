@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{%block content%}
+
+<button><a href="{% url 'signup' %}">add new account</a></button>
+{% if user.is_authenticated %}
+    <button><a href="{% url 'logout' %}">logout</a></button>
+{% endif %}
+<button><a href="{% url 'login' %}">login</a></button>
+
+<h4>Signed up users</h4>
+
+{% for user in users %}
+
+<h3>{{ user.username }}</h3>
+<h4>{{ user.bio }}</h4>
+ 
+{% endfor %}
+{% endblock %}

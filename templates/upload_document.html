@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{%load static%}
+
+{%block content%}
+
+<form method="POST" enctype="multipart/form-data" action="{% url 'post_document' %}">
+  {% csrf_token %}
+  <h2>Document Upload : </h2>
+  <input type="text" name="name" placeholder="File name" required>
+  <input type="file" name="file" required>
+    <h2>Select Folder :</h2>
+    <ul>
+        {% for folder in folders %}
+            {% if folder.parent == None %}
+                {% include "folder_node_sel.html" with folder=folder %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+  <h2>Select Users : </h2>
+  {% for user in users %}<input type="checkbox" name="allowed_users" value="{{ user.pk }}">{{ user.username }}{% endfor %}
+  <h2>Your Notes : </h2>
+  <input type="text" name="notes" placeholder="Notes" required>
+  <button type="submit">Upload</button>
+</form>
+
+<h2>Uploaded Documents</h2>
+
+{% for doc in documents %}
+<div class="document-class">
+
+    <h3>Document Name : {{ doc.name }}</h3>
+
+    <h3>Folder :</h3>
+    <ul>
+        {% for f in doc.folder.all %}
+        <li>{{ f.folder_name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Allowed Users :</h3>
+    <ol>
+        {% for user in doc.allowed_users.all %}
+        <li>{{ user.username }}</li>
+        {% endfor %}
+    </ol>
+
+    <h3>Notes : {{ doc.notes }}</h3>
+
+    <p>Uploaded at: {{ doc.uploaded_at }}</p>
+
+    <form action="{% url 'post_delete' doc.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="doc-delete">Delete</button>
+    </form>
+
+</div>
+
+{% empty %}
+<p>No documents uploaded yet.</p>
+{% endfor %}
+
+
+{%endblock%}
+
+

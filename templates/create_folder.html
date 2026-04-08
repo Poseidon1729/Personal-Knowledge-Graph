@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Folder{% endblock %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data" action="{% url 'create_folder' %}">
+  {% csrf_token %}
+  <input type="text" name="folder_name" placeholder="Folder name" required>
+  <h2>Allowerd Users : </h2>
+  {% for user in users %}<input type="checkbox" name="allowed_users" value="{{ user.pk }}">{{ user.username }}{% endfor %}
+  <button type="submit">Create</button>
+</form>
+
+{% endblock %}

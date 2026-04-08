@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Create Graph</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ graph_form.as_p }}
+    {{ formset.management_form }}\
+
+    <div id="form-container">
+
+        {% for form in formset %}
+        <div class="relation-form">
+
+            {{ form.source.label_tag }}
+            {{ form.source }}
+
+            {{ form.relation.label_tag }}
+            {{ form.relation }}
+
+            {{ form.target.label_tag }}
+            {{ form.target }}
+
+            <hr>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <button type="button" id="add-form">Add relation</button>
+
+    <br><br>
+
+    <button type="submit">Create Graph</button>
+
+</form>
+
+
+<script>
+
+const addButton = document.getElementById("add-form")
+const container = document.getElementById("form-container")
+const totalForms = document.getElementById("id_form-TOTAL_FORMS")
+
+addButton.addEventListener("click", function(){
+
+    const formCount = parseInt(totalForms.value)
+
+    const lastForm = container.children[formCount - 1]
+    const newForm = lastForm.cloneNode(true)
+
+    const regex = new RegExp(`form-(\\d)+-`, "g")
+
+    newForm.innerHTML = newForm.innerHTML.replace(regex, `form-${formCount}-`)
+
+    newForm.querySelectorAll("input, select").forEach(field => {
+        field.value = ""
+    })
+
+    container.appendChild(newForm)
+
+    totalForms.value = formCount + 1
+
+})
+
+</script>
+
+{% endblock %}

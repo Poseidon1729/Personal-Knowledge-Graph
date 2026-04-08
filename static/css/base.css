@@ -1,0 +1,217 @@
+/* ---------- Global ---------- */
+
+body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:#f6f8fb;
+    color:#1e293b;
+}
+
+h1,h2,h3{
+    margin-top:0;
+}
+
+a{
+    text-decoration:none;
+    color:#4f46e5;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+
+/* ---------- Header ---------- */
+
+header{
+    background:#0f172a;
+    color:white;
+    padding:16px 30px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+
+header h1{
+    font-size:20px;
+    font-weight:600;
+}
+
+/* ---------- Buttons ---------- */
+
+button{
+    background:#4f46e5;
+    border:none;
+    color:white;
+    padding:8px 14px;
+    border-radius:6px;
+    font-size:14px;
+    cursor:pointer;
+    transition:all .15s ease;
+}
+
+button:hover{
+    background:#4338ca;
+}
+
+/* ---------- Layout ---------- */
+
+.page-layout{
+    display:grid;
+    grid-template-columns:320px 1fr;
+    min-height:calc(100vh - 120px);
+}
+
+/* ---------- Sidebar ---------- */
+
+.sidebar{
+    width:320px;
+    background:white;
+    padding:24px;
+    border-right:1px solid #e5e7eb;
+    box-shadow:2px 0 8px rgba(0,0,0,0.03);
+}
+
+.sidebar h2{
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+.folders-list ul{
+    list-style:none;
+    padding-left:0;
+}
+
+.folders-list li{
+    padding:6px 4px;
+    border-radius:6px;
+    transition:background .12s ease;
+}
+
+.folders-list li:hover{
+    background:#f1f5f9;
+}
+
+/* ---------- Main Content ---------- */
+
+.content{
+    display:flex;
+    justify-content:center;
+    padding:40px 20px;
+}
+
+.content section{
+    width:100%;
+    max-width:900px;
+    background:white;
+    padding:35px;
+    border-radius:10px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.06);
+}
+
+/* ---------- Home buttons ---------- */
+
+.content button{
+    margin-right:6px;
+    margin-bottom:10px;
+}
+
+/* ---------- Lists ---------- */
+
+.content ul{
+    padding-left:18px;
+}
+
+/* ---------- Footer ---------- */
+
+footer{
+    text-align:center;
+    padding:14px;
+    font-size:13px;
+    background:#f1f5f9;
+    color:#64748b;
+    border-top:1px solid #e5e7eb;
+}
+
+button a{
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+button a:hover{
+    color: white;
+}
+
+/* ---------- Folder Tree ---------- */
+
+.folders-list ul{
+    list-style:none;
+    padding-left:18px;
+    margin:4px 0;
+    position:relative;
+}
+
+/* vertical branch line */
+.folders-list ul::before{
+    content:"";
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:6px;
+    border-left:1px solid #cbd5e1;
+}
+
+/* each folder row */
+.folders-list li{
+    position:relative;
+    padding-left:18px;
+    margin:4px 0;
+}
+
+/* horizontal branch */
+.folders-list li::before{
+    content:"";
+    position:absolute;
+    left:6px;
+    top:12px;
+    width:10px;
+    border-top:1px solid #cbd5e1;
+}
+
+/* folder hover */
+.folders-list li:hover{
+    background:#f1f5f9;
+    border-radius:6px;
+}
+
+/* ensure everything in the content column stays inside it */
+.content section > *{
+    max-width: 100%;
+}
+
+/* force document cards to stay inside the centered column */
+.document-class{
+    width: 100%;
+    max-width: 900px;
+    box-sizing: border-box;
+
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+    box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+}
+
+/* keep document text from overflowing */
+.document-class *{
+    word-break: break-word;
+}
+
+ul li img {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+}

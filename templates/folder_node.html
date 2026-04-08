@@ -1,0 +1,21 @@
+
+<li>
+    <a href="{% url 'folder_detail' folder.id %}"><img src="media/folder.png">{{ folder.folder_name }}</a>
+
+    <!-- Add subfolder button -->
+    <form action="{% url 'create_folder' %}" method="POST" style="display:inline;">
+        {% csrf_token %}
+        <input type="hidden" name="parent_id" value="{{ folder.id }}">
+        <input type="text" name="folder_name" placeholder="Add subfolder" required>
+        <button type="submit">+</button>
+    </form>
+
+    <!-- Children -->
+    {% if folder.subfolders.all %}
+        <ul>
+        {% for child in folder.subfolders.all %}
+            {% include "folder_node.html" with folder=child %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+</li>
