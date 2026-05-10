@@ -1,0 +1,13 @@
+{% load static %}
+
+{% block content %}
+
+<h3>Item Uploaded</h3>
+<div>
+    <img src="{{ item.image }}">
+    <h4>Location : {{ item.file_location }}</h4>
+    <h4>Source : {{ item.from }}</h4>
+    <h4>Used in Maps : {{ item.in_maps }}</h4>
+</div>
+
+{% endblock %}

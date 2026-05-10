@@ -1,0 +1,38 @@
+<h1>{{ folder.folder_name }}</h1>
+
+<!-- Create File Button -->
+<button>
+    <a href="{% url 'create_file' %}?folder={{ folder.id }}">+ New File</a>
+</button>
+
+<hr>
+
+<h2>Subfolders</h2>
+{% if subfolders %}
+<ul>
+    {% for sub in subfolders %}
+        <li>
+            <a href="{% url 'folder_detail' sub.id %}">
+                📁 {{ sub.folder_name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No subfolders here.</p>
+{% endif %}
+
+<hr>
+
+<h2>Files</h2>
+{% if files %}
+<ul>
+    {% for file in files %}
+        <li>
+            📄 {{ file.name }}
+        </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No files in this folder.</p>
+{% endif %}

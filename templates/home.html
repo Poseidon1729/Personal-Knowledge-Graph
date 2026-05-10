@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h3>Hi, {{ user.username }} !</h3>
+{% endif %}
+
+<h2>Home Page</h2>
+<p>Upload or enter your content below:</p>
+
+<div class="button-container">
+    <button onclick="location.href='{% url 'post_document' %}'">Doc</button>
+    <button>Excerpt</button>
+    <button>Screenshot</button>
+    <button>Enter Text</button>
+</div>
+
+
+<div class="Recent-maps">
+
+<h2>Recent maps</h2>
+
+<a href="{% url 'graphs:create_map_view' %}">+ Create Map</a>
+
+<ul style="list-style:none">
+
+{% for map in maps %}
+
+<li>
+
+<a href="{% url 'graphs:map_detail_view' %}?graph={{ map.graph_name }}">
+    {{ map.graph_name }}
+</a>
+
+</a>
+
+</li>
+
+{% empty %}
+
+<li>No maps found.</li>
+
+{% endfor %}
+
+</ul>
+
+</div>
+
+
+<h2>Recently Uploaded Items</h2>
+
+{% for doc in documents %}
+<div class="document-class">
+
+<h3>{{ doc.name }}</h3>
+
+<p>Uploaded at: {{ doc.uploaded_at }}</p>
+
+</div>
+
+{% empty %}
+
+<p>No documents uploaded yet.</p>
+
+{% endfor %}
+
+{% endblock %}

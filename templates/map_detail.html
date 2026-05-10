@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h2>Knowledge Graph: {{ graph_name }}</h2>
+
+{% csrf_token %}
+
+<div id="network" style="width:100%; height:600px; border:1px solid lightgray;"></div>
+
+{{ nodes|json_script:"nodes-data" }}
+{{ edges|json_script:"edges-data" }}
+
+<script>
+
+const nodes = new vis.DataSet(
+ JSON.parse(document.getElementById("nodes-data").textContent)
+);
+
+const edges = new vis.DataSet(
+ JSON.parse(document.getElementById("edges-data").textContent)
+);
+
+console.log(nodes)
+console.log(edges)
+
+const container = document.getElementById("network");
+
+const data = {
+ nodes: nodes,
+ edges: edges
+};
+
+const options = {
+ edges: {
+  arrows: "to",
+  font: { align: "middle" }
+ },
+ physics: {
+  enabled: false
+ },
+ interaction: {
+  dragNodes: true
+ }
+};
+
+const network = new vis.Network(container, data, options);
+
+// Function to save positions
+function savePositions() {
+    const positions = network.getPositions();
+    const positionData = Object.keys(positions).map(nodeId => ({
+        id: nodeId,
+        x: positions[nodeId].x,
+        y: positions[nodeId].y
+    }));
+
+    fetch('/graphs/save_positions/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]')?.value || ''
+        },
+        body: JSON.stringify({
+            graph_name: '{{ graph_name }}',
+            positions: positionData
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Positions saved successfully');
+        } else {
+            console.error('Failed to save positions:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error saving positions:', error);
+    });
+}
+
+// Listen for drag end events to save positions
+network.on('dragEnd', function(params) {
+    if (params.nodes.length > 0) {
+        // Debounce the save operation
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(savePositions, 1000); // Save after 1 second of no dragging
+    }
+});
+
+// Also save on stabilization (in case physics was temporarily enabled)
+network.on('stabilized', function() {
+    savePositions();
+});
+
+</script>
+
+{% endblock %}

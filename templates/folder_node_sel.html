@@ -1,0 +1,14 @@
+<li>
+    <label>
+        <input type="checkbox" name="folders" value="{{ folder.id }}">
+        <img src="{{ MEDIA_URL }}folder.png" alt="folder">{{ folder.folder_name }}
+    </label>
+
+    {% if folder.subfolders.all %}
+        <ul>
+            {% for child in folder.subfolders.all %}
+                {% include "folder_node_sel.html" with folder=child %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+</li>

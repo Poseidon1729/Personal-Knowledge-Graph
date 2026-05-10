@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Welcome to My Site</h1>
+    <button><a href="{% url 'user_list' %}">Users</a></button>
+</header>
+
+<main>
+
+<div class="page-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <button>
+            <a href="{% url 'create_folder' %}">+ New Folder</a>
+        </button>
+
+        <div class="folders-list">
+            <h2>Folders</h2>
+
+            <ul>
+            {% for folder in folders %}
+                {% if folder.parent == None %}
+                    {% include "folder_node.html" with folder=folder %}
+                {% endif %}
+            {% endfor %}
+            </ul>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="content">
+
+        <section>
+            {% block content %}
+            {% endblock %}
+        </section>
+
+    </div>
+
+</div>
+
+</main>
+
+<footer>
+    <p>&copy; 2025 My Site</p>
+</footer>
+
+</body>
+</html>
