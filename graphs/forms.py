@@ -11,7 +11,7 @@ class GraphForm(forms.Form):
     source = forms.ModelChoiceField(
         queryset=File.objects.all(),
         label="Source"
-    )   
+    )
 
     relation = forms.CharField(label="Relation")
 
