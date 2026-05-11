@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-(bp0kgrfwam8r-*rsdoalq#f51cu-210iri)_kg46ne@+3n)=-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['GraphBrain.onrender.com', 'localhost']
+ALLOWED_HOSTS = ['graphbrain.onrender.com', 'localhost']
 
 # Application definition
 
