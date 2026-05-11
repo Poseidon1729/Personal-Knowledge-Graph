@@ -143,3 +143,9 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'   # or os.path.join(BASE_DIR, 'media')
+
+# settings.py
+CSRF_TRUSTED_ORIGINS = [
+    'https://graphbrain.onrender.com',
+    'https://graphbrain-6xx4.onrender.com' # Füge beide Versionen hinzu, falls nötig
+]
