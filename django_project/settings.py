@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.Users"
 
 NEO4J_URI = os.environ.get('NEO4J_URI')
-NEO4J_USER = os.environ.get('NEO4J_USERNAME')
+NEO4J_USER = os.environ.get('NEO4J_USER')
 NEO4J_PASSWORD = os.environ.get('NEO4J_PASSWORD')
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
