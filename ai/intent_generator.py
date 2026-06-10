@@ -1,7 +1,7 @@
 # import google.generativeai as genai
 from django.conf import settings
 from neo4j import GraphDatabase
-
+from graphs.neo4j_client import get_driver
 
 # ---------------------------
 # CONFIGURATION
@@ -10,11 +10,6 @@ from neo4j import GraphDatabase
 # Temporarily disabled - causing import errors
 # genai.configure(api_key=settings.GEMINI_API_KEY)
 # model = genai.GenerativeModel("models/gemini-2.5-flash")
-
-driver = GraphDatabase.driver(
-    settings.NEO4J_URI,
-    auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD)
-)
 
 PROMPT_TEMPLATE = """
 You are an intent parser.
@@ -88,7 +83,7 @@ def run_cypher(query, params):
     if not query:
         return []
 
-    with driver.session() as session:
+    with get_driver().session() as session:  # ← changed
         result = session.run(query, **params)
         return [record["m"]["name"] for record in result]
 

@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from neo4j import GraphDatabase
 from django.conf import settings
 from .forms import GraphFormSet, GraphNameForm
 from ui.models import Folder
@@ -7,27 +6,19 @@ from django.http import HttpResponse, JsonResponse
 from .models import GraphPosition
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .neo4j_client import get_driver
 
-driver = GraphDatabase.driver(
-    settings.NEO4J_URI,
-    auth=(settings.NEO4J_USER, settings.NEO4J_PASSWORD),
-)
 
 def create_map_view(request):
-
     if request.method == "POST":
-
         graph_form = GraphNameForm(request.POST)
         formset = GraphFormSet(request.POST)
 
         if graph_form.is_valid() and formset.is_valid():
-
             graph_name = graph_form.cleaned_data["graph_name"]
 
-            with driver.session() as session:
-
+            with get_driver().session() as session:  # ← changed
                 for form in formset:
-
                     source = form.cleaned_data.get("source")
                     relation = form.cleaned_data.get("relation")
                     target = form.cleaned_data.get("target")
@@ -38,41 +29,28 @@ def create_map_view(request):
                     session.run(
                         """
                         MERGE (a:File {id:$sid})
-                        SET a.name = $sname,
-                            a.graph = $graph
-
+                        SET a.name = $sname, a.graph = $graph
                         MERGE (b:File {id:$tid})
-                        SET b.name = $tname,
-                            b.graph = $graph
-
+                        SET b.name = $tname, b.graph = $graph
                         MERGE (a)-[r:RELATED {type:$rel}]->(b)
                         """,
-                        sid=source.id,
-                        sname=source.name,
-                        tid=target.id,
-                        tname=target.name,
-                        rel=relation,
-                        graph=graph_name
+                        sid=source.id, sname=source.name,
+                        tid=target.id, tname=target.name,
+                        rel=relation, graph=graph_name
                     )
 
-
             return redirect("home")
-
     else:
         graph_form = GraphNameForm()
         formset = GraphFormSet()
 
     folders = Folder.objects.all()
+    return render(request, "create_map.html", {
+        "graph_form": graph_form,
+        "formset": formset,
+        "folders": folders
+    })
 
-    return render(
-        request,
-        "create_map.html",
-        {
-            "graph_form": graph_form,
-            "formset": formset,
-            "folders": folders
-        }
-    )
 
 def map_detail_view(request):
     graph_name = request.GET.get("graph")
@@ -87,7 +65,7 @@ def map_detail_view(request):
     nodes_set = set()
     edges = []
 
-    with driver.session() as session:
+    with get_driver().session() as session:  # ← changed
         result = session.run(query, graph=graph_name)
         for record in result:
             src = record["source"]
