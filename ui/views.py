@@ -3,7 +3,7 @@ from ingest.models import File
 from ui.models import Folder
 from users.models import Users
 from django.contrib.auth.decorators import login_required
-from graphs.views import driver
+from graphs.neo4j_client import get_driver
 
 @login_required
 def home(request):
@@ -17,7 +17,7 @@ def home(request):
     ORDER BY graph_name
     """
 
-    with driver.session() as session:
+    with get_driver().session() as session:
         result = session.run(query)
         maps = [record.data() for record in result]
 
@@ -97,7 +97,7 @@ def map_detail_view(request):
     nodes = set()
     edges = []
 
-    with driver.session() as session:
+    with get_driver().session() as session:
         result = session.run(query, source=source, target=target)
 
         for record in result:
